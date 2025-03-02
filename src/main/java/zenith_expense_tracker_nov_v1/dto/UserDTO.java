@@ -25,7 +25,6 @@ public class UserDTO {
     private String email;
 
     @NotBlank(message = "{NotBlank.password}")
-
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+={}\\[\\]|\\\\:;\\\"'<>,.?/-]).{5,15}$", message = "{Pattern.password}")
     private String password;
 
@@ -35,10 +34,6 @@ public class UserDTO {
 
     @NotBlank(message = "{NotBlank.securityKey}")
     private String securityKey;
-
-    private Long propertyId;
-
-    private String propertyName;
 
     // Convert UserDTO to User entity
     public User toEntity() {
@@ -62,9 +57,7 @@ public class UserDTO {
                 user.getPassword(),
                 user.getAccountType(),
                 user.getRegistrationDate(),
-                user.getSecurityKey(),
-                user.getProperty() != null ? user.getProperty().getId() : null,
-                user.getProperty() != null ? user.getProperty().getName() : null
+                user.getSecurityKey()
         );
     }
 }

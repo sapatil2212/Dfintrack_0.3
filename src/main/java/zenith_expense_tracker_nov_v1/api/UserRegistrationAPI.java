@@ -1,3 +1,5 @@
+//Manages Registration for USERS
+
 package zenith_expense_tracker_nov_v1.api;
 
 import jakarta.validation.Valid;

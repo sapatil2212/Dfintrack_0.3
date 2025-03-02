@@ -45,6 +45,7 @@ public class UserAPI {
     @Autowired
     private UserService userService;
 
+    //Manages Registration for ADMIN only
     @PostMapping("/register")
     public ResponseEntity<Object> registerUser(@RequestBody @Valid UserDTO userDTO) {
         try {
@@ -62,7 +63,7 @@ public class UserAPI {
     }
 
 
-
+    //Manages Login for ADMIN/USER (BOTH)
     @PostMapping("/login")
     public ResponseEntity<Object> loginUser(@RequestBody @Valid LoginDTO loginDTO) {
         try {

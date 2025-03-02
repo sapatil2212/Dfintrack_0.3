@@ -1,59 +1,62 @@
 package zenith_expense_tracker_nov_v1.dto;
 
+import lombok.*;
+import zenith_expense_tracker_nov_v1.enums.BillingType;
+import zenith_expense_tracker_nov_v1.enums.BookingStatus;
+import zenith_expense_tracker_nov_v1.enums.BookingType;
+import zenith_expense_tracker_nov_v1.enums.OccupancyType;
+
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class BookingDTO {
 
     private Long id;
+    private String bookingNumber;
+    private Long propertyId;
+
+    private BookingType bookingType;
+    private Long customerMasterId;
+    private String customerCompanyName;
+    private String customerCompanyEmail;
+    private String customerContactPersonName;
+    private String customerCompanyContactNumber;
+    private String customerCompanyAddress;
+    private String customerGstNumber;
+
+
     private String guestName;
-    private String email;
-    private String phoneNo;
+    private String phoneNumber;
+    private int numberOfRooms;
     private LocalDate checkInDate;
     private LocalDate checkOutDate;
-    private String roomNo;
-    private int noOfGuests;
-    private int noOfChildren;
-    private String companyName;
+    private OccupancyType occupancyType;
+    private String idProof;
+    private BookingStatus bookingStatus;
+    private BigDecimal bookingAmount;
+    private BigDecimal advanceAmount;
+    private BillingType billingType;
+    private Long bankAccountId;
     private LocalDateTime bookingDateTime;
-    private boolean isCheckedOut;
-    private String documentSubmitted;
-    private Long propertyId;
-    private Long userId;
-    private String createdByUsername;
+    private String email;
+    private String paymentMode;
+    private BigDecimal refundAmount;
+    private Boolean acceptFoodGST;
 
-    public BookingDTO() {
+    // Add getter and setter
+    public Boolean getAcceptFoodGST() {
+        return acceptFoodGST;
     }
 
-    public BookingDTO(Long id, String guestName, String email, String phoneNo, LocalDate checkInDate, LocalDate checkOutDate,
-                      String roomNo, int noOfGuests, int noOfChildren, String companyName, LocalDateTime bookingDateTime,
-                      boolean isCheckedOut, String documentSubmitted, Long propertyId, Long userId, String createdByUsername) {
-        this.id = id;
-        this.guestName = guestName;
-        this.email = email;
-        this.phoneNo = phoneNo;
-        this.checkInDate = checkInDate;
-        this.checkOutDate = checkOutDate;
-        this.roomNo = roomNo;
-        this.noOfGuests = noOfGuests;
-        this.noOfChildren = noOfChildren;
-        this.companyName = companyName;
-        this.bookingDateTime = bookingDateTime;
-        this.isCheckedOut = isCheckedOut;
-        this.documentSubmitted = documentSubmitted;
-        this.propertyId = propertyId;
-        this.userId = userId;
-        this.createdByUsername = createdByUsername;
+    public void setAcceptFoodGST(Boolean acceptFoodGST) {
+        this.acceptFoodGST = acceptFoodGST;
     }
-
-    public String getCreatedByUsername() {
-        return createdByUsername;
-    }
-
-    public void setCreatedByUsername(String createdByUsername) {
-        this.createdByUsername = createdByUsername;
-    }
-
 
     public Long getId() {
         return id;
@@ -61,6 +64,30 @@ public class BookingDTO {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public BookingType getBookingType() {
+        return bookingType;
+    }
+
+    public void setBookingType(BookingType bookingType) {
+        this.bookingType = bookingType;
+    }
+
+    public Long getPropertyId() {
+        return propertyId;
+    }
+
+    public void setPropertyId(Long propertyId) {
+        this.propertyId = propertyId;
+    }
+
+    public Long getCustomerMasterId() {
+        return customerMasterId;
+    }
+
+    public void setCustomerMasterId(Long customerMasterId) {
+        this.customerMasterId = customerMasterId;
     }
 
     public String getGuestName() {
@@ -71,20 +98,20 @@ public class BookingDTO {
         this.guestName = guestName;
     }
 
-    public String getEmail() {
-        return email;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
-    public String getPhoneNo() {
-        return phoneNo;
+    public int getNumberOfRooms() {
+        return numberOfRooms;
     }
 
-    public void setPhoneNo(String phoneNo) {
-        this.phoneNo = phoneNo;
+    public void setNumberOfRooms(int numberOfRooms) {
+        this.numberOfRooms = numberOfRooms;
     }
 
     public LocalDate getCheckInDate() {
@@ -103,36 +130,60 @@ public class BookingDTO {
         this.checkOutDate = checkOutDate;
     }
 
-    public String getRoomNo() {
-        return roomNo;
+    public OccupancyType getOccupancyType() {
+        return occupancyType;
     }
 
-    public void setRoomNo(String roomNo) {
-        this.roomNo = roomNo;
+    public void setOccupancyType(OccupancyType occupancyType) {
+        this.occupancyType = occupancyType;
     }
 
-    public int getNoOfGuests() {
-        return noOfGuests;
+    public String getIdProof() {
+        return idProof;
     }
 
-    public void setNoOfGuests(int noOfGuests) {
-        this.noOfGuests = noOfGuests;
+    public void setIdProof(String idProof) {
+        this.idProof = idProof;
     }
 
-    public int getNoOfChildren() {
-        return noOfChildren;
+    public BookingStatus getBookingStatus() {
+        return bookingStatus;
     }
 
-    public void setNoOfChildren(int noOfChildren) {
-        this.noOfChildren = noOfChildren;
+    public void setBookingStatus(BookingStatus bookingStatus) {
+        this.bookingStatus = bookingStatus;
     }
 
-    public String getCompanyName() {
-        return companyName;
+    public BigDecimal getBookingAmount() {
+        return bookingAmount;
     }
 
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
+    public void setBookingAmount(BigDecimal bookingAmount) {
+        this.bookingAmount = bookingAmount;
+    }
+
+    public BigDecimal getAdvanceAmount() {
+        return advanceAmount;
+    }
+
+    public void setAdvanceAmount(BigDecimal advanceAmount) {
+        this.advanceAmount = advanceAmount;
+    }
+
+    public BillingType getBillingType() {
+        return billingType;
+    }
+
+    public void setBillingType(BillingType billingType) {
+        this.billingType = billingType;
+    }
+
+    public Long getBankAccountId() {
+        return bankAccountId;
+    }
+
+    public void setBankAccountId(Long bankAccountId) {
+        this.bankAccountId = bankAccountId;
     }
 
     public LocalDateTime getBookingDateTime() {
@@ -143,35 +194,27 @@ public class BookingDTO {
         this.bookingDateTime = bookingDateTime;
     }
 
-    public boolean isCheckedOut() {
-        return isCheckedOut;
+    public String getEmail() {
+        return email;
     }
 
-    public void setCheckedOut(boolean checkedOut) {
-        isCheckedOut = checkedOut;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public String getDocumentSubmitted() {
-        return documentSubmitted;
+    public String getPaymentMode() {
+        return paymentMode;
     }
 
-    public void setDocumentSubmitted(String documentSubmitted) {
-        this.documentSubmitted = documentSubmitted;
+    public void setPaymentMode(String paymentMode) {
+        this.paymentMode = paymentMode;
     }
 
-    public Long getPropertyId() {
-        return propertyId;
+    public BigDecimal getRefundAmount() {
+        return refundAmount;
     }
 
-    public void setPropertyId(Long propertyId) {
-        this.propertyId = propertyId;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setRefundAmount(BigDecimal refundAmount) {
+        this.refundAmount = refundAmount;
     }
 }

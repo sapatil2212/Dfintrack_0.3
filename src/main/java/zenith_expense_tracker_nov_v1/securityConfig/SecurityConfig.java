@@ -1,6 +1,7 @@
 package zenith_expense_tracker_nov_v1.securityConfig;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -31,10 +32,13 @@ public class SecurityConfig {
     @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
 
+    @Value("${frontend.url}")
+    private  String frontendUrl;
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173")); // Allow frontend URL
+        configuration.setAllowedOrigins(Arrays.asList(frontendUrl)); // Allow frontend URL
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Requested-With", "user-id" , "userId", "adminId"));
         configuration.setAllowCredentials(true);
@@ -54,7 +58,9 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authz -> authz
                         // Public endpoints
-                        .requestMatchers("api/test/token", "/users/login", "/users/**", "/registration/**", "api/users/**",  "api/expenses/**", "api/booking/**", "api/bills/**", "api/**", "api/property-revenues/**", "api/personal-revenues/**").permitAll()
+                        .requestMatchers("api/test/token", "/users/login", "/users/**", "/registration/**",
+                                "api/users/**",  "api/expenses/**", "api/booking/**", "api/bills/**", "api/**",
+                                "api/property-revenues/**", "api/personal-revenues/**", "api/customers", "api/bookings").permitAll()
                         .requestMatchers("api/profile/**").authenticated()
                         // Admin-specific endpoints
 

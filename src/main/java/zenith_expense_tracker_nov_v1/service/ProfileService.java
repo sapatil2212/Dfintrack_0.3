@@ -22,7 +22,7 @@ public class ProfileService {
     private PasswordEncoder passwordEncoder;
 
     public User getUser(String email) {
-        return userRepository.findByEmailWithProperty(email)
+        return userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("User not found for email: " + email));
     }
     @Transactional

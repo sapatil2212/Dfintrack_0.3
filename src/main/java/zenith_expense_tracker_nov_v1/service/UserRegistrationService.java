@@ -15,15 +15,11 @@ import zenith_expense_tracker_nov_v1.repository.UserRepository;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 @Service
 public class UserRegistrationService {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private PropertyRepository propertyRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -32,7 +28,6 @@ public class UserRegistrationService {
     private static final String PASSWORD_REGEX = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d@$!%*?&]{5,15}$";
 
     public UserDTO registerUserWithProperty(UserDTO userDTO) {
-
         // Validate email format
         if (!isValidEmail(userDTO.getEmail())) {
             throw new IllegalArgumentException("Email is not valid");
@@ -48,7 +43,7 @@ public class UserRegistrationService {
             throw new InvalidSecurityKeyException("Invalid Security Key");
         }
 
-        // Validate password strength (must meet the regex criteria)
+        // Validate password strength
         if (!isValidPassword(userDTO.getPassword())) {
             throw new IllegalArgumentException("Password must be between 5 to 15 characters long and contain both letters and numbers (and can include special characters).");
         }
@@ -56,19 +51,6 @@ public class UserRegistrationService {
         // Encode password before saving
         userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         User user = userDTO.toEntity();
-
-        // Ensure property assignment if user is registering as USER
-        if (user.getAccountType() == AccountType.USER) {
-            if (userDTO.getPropertyId() == null) {
-                throw new IllegalArgumentException("Property must be assigned to users with account type USER.");
-            }
-
-            // Check if the property exists
-            Property property = propertyRepository.findById(userDTO.getPropertyId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Property not found with ID: " + userDTO.getPropertyId()));
-
-            user.setProperty(property);
-        }
 
         // Save the user to the repository
         user = userRepository.save(user);
@@ -87,7 +69,6 @@ public class UserRegistrationService {
 
     // Helper method to validate password format
     private boolean isValidPassword(String password) {
-        // Check if the password matches the pattern for letters, digits, and allowed special characters
         Pattern pattern = Pattern.compile(PASSWORD_REGEX);
         Matcher matcher = pattern.matcher(password);
         return matcher.matches();

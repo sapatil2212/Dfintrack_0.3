@@ -3,16 +3,13 @@ package zenith_expense_tracker_nov_v1.api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import zenith_expense_tracker_nov_v1.dto.PropertyRevenueDTO;
 import zenith_expense_tracker_nov_v1.exception.ResourceNotFoundException;
-
 import zenith_expense_tracker_nov_v1.exception.UnauthorizedException;
 import zenith_expense_tracker_nov_v1.service.PropertyRevenueService;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
@@ -48,22 +45,6 @@ public class PropertyRevenueController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ApiResponse<>(ex.getMessage()));
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>("An error occurred while retrieving the revenue."));
-        }
-    }
-
-    @GetMapping("/property/{propertyId}")
-    public ResponseEntity<?> getRevenuesByProperty(
-            @PathVariable Long propertyId,
-            @RequestParam Long userId) {
-        try {
-            List<PropertyRevenueDTO> revenues = propertyRevenueService.getAllRevenuesByPropertyId(propertyId, userId);
-            return ResponseEntity.ok(new ApiResponse<>("Revenues retrieved successfully", revenues));
-        } catch (ResourceNotFoundException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>(ex.getMessage()));
-        } catch (UnauthorizedException ex) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ApiResponse<>(ex.getMessage()));
-        } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>("An error occurred while retrieving revenues."));
         }
     }
 
@@ -110,19 +91,6 @@ public class PropertyRevenueController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ApiResponse<>(ex.getMessage()));
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>("An error occurred while retrieving all revenues."));
-        }
-    }
-
-    @GetMapping("/property-wise")
-    public ResponseEntity<?> getRevenuesPropertyWise(
-            @RequestParam Long userId) {
-        try {
-            Map<String, List<PropertyRevenueDTO>> revenuesGrouped = propertyRevenueService.getRevenuesGroupedByProperty(userId);
-            return ResponseEntity.ok(new ApiResponse<>("Revenues grouped by property retrieved successfully", revenuesGrouped));
-        } catch (UnauthorizedException ex) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ApiResponse<>(ex.getMessage()));
-        } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>("An error occurred while retrieving property-wise revenues."));
         }
     }
 

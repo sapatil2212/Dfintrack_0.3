@@ -34,10 +34,6 @@ public class User {
 
     private String securityKey;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "property_id", nullable = true)
-    private Property property;
-
     @PrePersist
     public void prePersist() {
         if (registrationDate == null) {
@@ -53,9 +49,7 @@ public class User {
                 this.password,
                 this.accountType,
                 this.registrationDate,
-                this.securityKey,
-                this.property != null ? this.property.getId() : null,
-                this.property != null ? this.property.getName() : null
+                this.securityKey
         );
     }
 }

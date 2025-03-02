@@ -1,10 +1,11 @@
 package zenith_expense_tracker_nov_v1.entity;
 
-
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
+import lombok.*;
+import zenith_expense_tracker_nov_v1.enums.BillingType;
+import zenith_expense_tracker_nov_v1.enums.BookingStatus;
+import zenith_expense_tracker_nov_v1.enums.BookingType;
+import zenith_expense_tracker_nov_v1.enums.OccupancyType;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -14,58 +15,71 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Bill {
 
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-        @Column(unique = true, nullable = false)
-        private String invoiceNumber;
-
-        @ManyToOne(fetch = FetchType.LAZY)
-        @JoinColumn(name = "booking_id", nullable = false)
-        private Booking booking;
-
-        @Column(nullable = false)
-        private Double amount;
-
-        @Column(nullable = false)
-        private Double totalAmount;
-
-        @Column(nullable = false)
-        private Double cgst;
-
-        @Column(nullable = false)
-        private Double sgst;
-
-        @Column(name = "bill_date_time", nullable = false)
-        private LocalDateTime billDateTime;
-
-        @Column(nullable = false)
-        private LocalDateTime generatedDate;
-
-        @ManyToOne(fetch = FetchType.LAZY)
-        @JoinColumn(name = "generated_by_user_id", nullable = false)
-        private User generatedByUser;
-
-        @Column(nullable = false)
-        private String propertyName;
-
-        @Column
-        private Long propertyId;
+    @Column(nullable = false, unique = true)
+    private String billNumber;
 
     @Column(nullable = false)
-    private String modeOfPayment;
+    private Long bookingId;
 
-    // Add getters and setters
-    public LocalDateTime getBillDateTime() {
-        return billDateTime;
-    }
+    @Column(nullable = false)
+    private String guestName;
 
-    public void setBillDateTime(LocalDateTime billDateTime) {
-        this.billDateTime = billDateTime;
-    }
+    @Column(nullable = false)
+    private String phoneNumber;
 
-    // Other getters and setters remain the same
+    @Enumerated(EnumType.STRING)
+    private OccupancyType occupancyType;
+
+    @Column(nullable = false)
+    private String bookingNumber;
+
+    @Column(name = "booking_date_time", nullable = false)
+    private LocalDateTime bookingDateTime;
+
+
+    @Column(nullable = false)
+    private String email;
+
+    @Column(nullable = false)
+    private LocalDateTime checkInDate;
+
+    @Column(nullable = false)
+    private LocalDateTime checkOutDate;
+
+    @Column(nullable = false)
+    private int numberOfRooms;
+
+    @Column(nullable = false)
+    private BigDecimal bookingAmount;
+
+    @Column(nullable = false)
+    private BigDecimal totalAmount;
+
+    @Column(nullable = false)
+    private BigDecimal foodGSTAmount;
+
+    @Column(nullable = false)
+    private BigDecimal stayGSTAmount;
+
+    @Column(nullable = false)
+    private LocalDateTime billGenerationDateTime;
+
+    @Column(nullable = false)
+    private String paymentMode;
+
+    @Enumerated(EnumType.STRING)
+    private BillingType billingType;
+
+    @Enumerated(EnumType.STRING)
+    private BookingStatus bookingStatusEnum;
+
+    @Lob
+    private byte[] pdfContent;
 }

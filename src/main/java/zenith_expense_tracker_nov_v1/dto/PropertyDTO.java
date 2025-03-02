@@ -5,19 +5,17 @@ public class PropertyDTO {
     private String name;
     private String address;
     private String description;
-    private Long userId;
-    private String userName;
+
 
     // Constructors, getters, setters
     public PropertyDTO() {}
 
-    public PropertyDTO(Long id, String name, String address, String description, Long userId, String userName) {
+    public PropertyDTO(Long id, String name, String address, String description) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.description = description;
-        this.userId = userId;
-        this.userName = userName;
+
     }
 
     // Getters and setters
@@ -53,19 +51,5 @@ public class PropertyDTO {
         this.description = description;
     }
 
-    public Long getUserId() {
-        return userId;
-    }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
 }

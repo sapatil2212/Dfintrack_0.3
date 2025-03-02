@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Invoice Template</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&amp;display=swap" rel="stylesheet" />
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: #f9fafb;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border: 1px solid #f3f4f6;
+        }
+
+        .header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #f3f4f6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            color: #6b7280;
+            font-size: 0.75rem;
+        }
+
+        .brand-name {
+            color: #111827;
+            font-size: 1rem;
+            font-weight: 600;
+            margin: 0.25rem 0;
+        }
+
+        .invoice-title {
+            color: #312e81;
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-align: center;
+            flex: 1;
+        }
+
+        .logo {
+            width: 80px;
+            height: auto;
+        }
+
+        .thank-you-banner {
+            background-color: #f0fdf4;
+            padding: 1rem;
+            margin: 1.5rem;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .thank-you-banner .icon {
+            background-color: white;
+            padding: 0.5rem;
+            border-radius: 8px;
+        }
+
+        .thank-you-banner h2 {
+            color: #166534;
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .thank-you-banner p {
+            color: #4b5563;
+            font-size: 0.75rem;
+        }
+
+        .booking-details {
+            padding: 1.5rem;
+        }
+
+        .booking-details h2 {
+            color: #111827;
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .detail-item label {
+            color: #6b7280;
+            font-size: 0.75rem;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .detail-item p {
+            color: #111827;
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+
+        .price-summary {
+            background-color: #f0fdf4;
+            margin: 0 1.5rem;
+            padding: 1.5rem;
+            border-radius: 12px;
+        }
+
+        .price-summary h2 {
+            color: #111827;
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .price-item {
+            display: flex;
+            justify-content: space-between;
+            color: #4b5563;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .total-price {
+            display: flex;
+            justify-content: space-between;
+            color: #166534;
+            font-size: 1rem;
+            font-weight: 700;
+            padding-top: 1rem;
+            border-top: 1px solid #d1d5db;
+        }
+
+        .terms {
+            padding: 1.5rem;
+        }
+
+        .terms h3 {
+            color: #374151;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .terms-list {
+            list-style-position: inside;
+            margin-bottom: 1.5rem;
+        }
+
+        .terms-list li {
+            color: #4b5563;
+            font-size: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer {
+            padding: 1.5rem;
+            border-top: 1px solid #f3f4f6;
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- Header -->
+    <div class="header">
+        <div class="brand">
+            <div>Powered By</div>
+            <img th:src="@{classpath:/static/logo.png}" alt="Logo" class="logo" />
+        </div>
+        <div class="invoice-title">INVOICE</div>
+    </div>
+
+    <!-- Thank You Banner -->
+    <div class="thank-you-banner">
+        <div class="flex items-center gap-4">
+            <div class="icon">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+            </div>
+            <div>
+                <h2>Thank you for your trust!</h2>
+                <p>We are happy to serve you. This is a digitally generated invoice.</p>
+            </div>
+        </div>
+        <div>
+            <img th:src="@{classpath:/static/zenith-logo.png}" alt="Zenith Hospitality Logo" class="w-24 h-16" />
+        </div>
+    </div>
+
+    <!-- Booking Details -->
+    <div class="booking-details">
+        <h2>Booking Details</h2>
+        <div class="details-grid">
+            <div class="detail-item">
+                <label>Guest Name</label>
+                <p th:text="${bill.guestName}">Guest Name</p>
+            </div>
+            <div class="detail-item">
+                <label>Check-in</label>
+                <p th:text="${#temporals.format(bill.checkInDate, 'EEE, dd MMM yyyy')}">Check-in Date</p>
+            </div>
+            <div class="detail-item">
+                <label>Check-out</label>
+                <p th:text="${#temporals.format(bill.checkOutDate, 'EEE, dd MMM yyyy')}">Check-out Date</p>
+            </div>
+            <div class="detail-item">
+                <label>Booking Type</label>
+                <p th:text="${bill.billingType}">Booking Type</p>
+            </div>
+            <div class="detail-item">
+                <label>Phone Number</label>
+                <p th:text="${bill.phoneNumber}">Phone Number</p>
+            </div>
+            <div class="detail-item">
+                <label>Number of Rooms</label>
+                <p th:text="${bill.numberOfRooms}">Number of Rooms</p>
+            </div>
+            <div class="detail-item">
+                <label>Booking ID</label>
+                <p th:text="${bill.bookingId}">Booking ID</p>
+            </div>
+            <div class="detail-item">
+                <label>Payment Status</label>
+                <p>Paid</p>
+            </div>
+            <div class="detail-item">
+                <label>Booking Date</label>
+                <p th:text="${#temporals.format(bill.billGenerationDateTime, 'dd MMM yyyy')}">Booking Date</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Price Summary -->
+    <div class="price-summary">
+        <h2>Your Price Summary</h2>
+        <div class="price-item">
+            <span>Booking Amount</span>
+            <span th:text="'Rs. ' + ${#numbers.formatDecimal(bill.bookingAmount, 0, 'COMMA', 2, 'POINT')} + '/-'">Amount</span>
+        </div>
+        <div class="price-item">
+            <span>Stay GST</span>
+            <span th:text="'Rs. ' + ${#numbers.formatDecimal(bill.stayGSTAmount, 0, 'COMMA', 2, 'POINT')} + '/-'">GST</span>
+        </div>
+        <div class="price-item">
+            <span>Food GST</span>
+            <span th:text="'Rs. ' + ${#numbers.formatDecimal(bill.foodGSTAmount, 0, 'COMMA', 2, 'POINT')} + '/-'">Food Tax</span>
+        </div>
+        <div class="total-price">
+            <span>TO PAY</span>
+            <span th:text="'Rs. ' + ${#numbers.formatDecimal(bill.totalAmount, 0, 'COMMA', 2, 'POINT')} + '/-'">Total</span>
+        </div>
+    </div>
+
+    <!-- Terms & Conditions -->
+    <div class="terms">
+        <h3>Terms &amp; Conditions</h3>
+        <ol class="terms-list">
+            <li>This is a digital copy of the booking confirmation and not the final document.</li>
+            <li>The details mentioned are subject to change.</li>
+            <li>Please review the details carefully. If there are any discrepancies or changes, contact us immediately.</li>
+        </ol>
+
+        <h3>Important Information</h3>
+        <ul class="terms-list">
+            <li>Standard Check-in: 12:00 PM</li>
+            <li>Standard Check-out: 11:00 AM</li>
+            <li>Please carry a valid ID proof</li>
+            <li>Early check-in subject to availability</li>
+        </ul>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        Email: help@digiworldinfotech.com | Phone: +91 883 055 3868, +91 820 841 5943
+    </div>
+</div>
+</body>
+</html>

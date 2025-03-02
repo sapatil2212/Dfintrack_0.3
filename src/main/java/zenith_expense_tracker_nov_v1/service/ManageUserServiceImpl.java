@@ -1,7 +1,5 @@
 package zenith_expense_tracker_nov_v1.service;
 
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -10,7 +8,6 @@ import zenith_expense_tracker_nov_v1.dto.UserDTO;
 import zenith_expense_tracker_nov_v1.entity.User;
 import zenith_expense_tracker_nov_v1.exception.UserNotFoundException;
 import zenith_expense_tracker_nov_v1.repository.UserRepository;
-import zenith_expense_tracker_nov_v1.service.ManageUserService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -46,7 +43,7 @@ public class ManageUserServiceImpl implements ManageUserService {
                 .stream()
                 .map(user -> {
                     UserDTO dto = user.toDTO();
-                    dto.setPassword(null);  // Exclude password
+                    dto.setPassword(null);
                     return dto;
                 })
                 .collect(Collectors.toList());
@@ -79,8 +76,12 @@ public class ManageUserServiceImpl implements ManageUserService {
 
     @Override
     public void deleteUser(Long id) {
+
         User existingUser = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + id));
         userRepository.delete(existingUser);
+
+        System.out.println("User with ID: " + id + " has been deleted from the database.");
     }
+
 }

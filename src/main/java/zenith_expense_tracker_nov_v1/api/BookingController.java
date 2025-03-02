@@ -1,91 +1,131 @@
 package zenith_expense_tracker_nov_v1.api;
 
-
-
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import zenith_expense_tracker_nov_v1.dto.BookingDTO;
+import zenith_expense_tracker_nov_v1.entity.Booking;
+import zenith_expense_tracker_nov_v1.enums.BillingType;
+import zenith_expense_tracker_nov_v1.enums.BookingStatus;
+import zenith_expense_tracker_nov_v1.exception.ResourceNotFoundException;
 import zenith_expense_tracker_nov_v1.service.BookingService;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/api/bookings")
 public class BookingController {
 
     @Autowired
     private BookingService bookingService;
 
+    // Create a new booking
     @PostMapping
+    public ResponseEntity<Booking> createBooking(@RequestBody BookingDTO bookingDTO) {
 
-    public ResponseEntity<BookingDTO> createBooking(@RequestBody BookingDTO bookingDto) {
-        BookingDTO createdBooking = bookingService.createBooking(bookingDto);
-        return new ResponseEntity<>(createdBooking, HttpStatus.CREATED);
+        if (bookingDTO.getBookingAmount() == null || bookingDTO.getBookingAmount().compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("Booking amount must be greater than zero.");
+        }
+
+
+        Booking booking = bookingService.createBooking(bookingDTO);
+        return ResponseEntity.ok(booking);
     }
 
-    @PutMapping("/{id}")
+    // Cancel a booking
+    @PostMapping("/{id}/cancel")
+    public ResponseEntity<Void> cancelBooking(
+            @PathVariable Long id,
+            @RequestParam BigDecimal refundAmount) {
+        // Validate refund amount (optional)
+        if (refundAmount.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("Refund amount cannot be negative.");
+        }
 
-    public ResponseEntity<BookingDTO> updateBooking(@PathVariable Long id, @RequestBody BookingDTO bookingDto) {
-        BookingDTO updatedBooking = bookingService.updateBooking(id, bookingDto);
-        return ResponseEntity.ok(updatedBooking);
+        // Delegate to the service layer
+        bookingService.cancelBooking(id, refundAmount);
+        return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteBooking(@PathVariable Long id) {
+    // Get all bookings
+    @GetMapping
+    public ResponseEntity<List<Booking>> getAllBookings() {
+        List<Booking> bookings = bookingService.getAllBookings();
+        return ResponseEntity.ok(bookings);
+    }
+
+    // Get a booking by ID
+    @GetMapping("/{id}")
+    public ResponseEntity<Booking> getBookingById(@PathVariable Long id) {
+        Booking booking = bookingService.getBookingById(id);
+        return ResponseEntity.ok(booking);
+    }
+    @PutMapping("/{id}/confirm")
+    public ResponseEntity<?> confirmBooking(
+            @PathVariable Long id,
+            @RequestParam BigDecimal remainingAmount) {
         try {
-            bookingService.deleteBooking(id);
-            return ResponseEntity.ok("Booking deleted successfully with ID: " + id);
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Booking not found with ID: " + id);
+            // Validate remaining amount (must be between 0 and the total booking amount)
+            if (remainingAmount.compareTo(BigDecimal.ZERO) < 0) {
+                return ResponseEntity.badRequest().body("Remaining amount cannot be negative.");
+            }
+
+            // Delegate to the service layer
+            Booking booking = bookingService.confirmBooking(id, remainingAmount);
+            return ResponseEntity.ok(booking);
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while deleting the booking.");
+
+            return ResponseEntity.internalServerError().body("An error occurred while confirming the booking.");
         }
     }
+    // Update a booking
+    @PutMapping("/{id}")
+    public ResponseEntity<Booking> updateBooking(
+            @PathVariable Long id,
+            @RequestBody BookingDTO bookingDTO) {
+        // Validate the bookingDTO
+        if (bookingDTO.getBookingAmount() == null || bookingDTO.getBookingAmount().compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("Booking amount must be greater than zero.");
+        }
 
-    @GetMapping("/{id}")
+        // Validate GST related fields
+        if (bookingDTO.getBillingType() == BillingType.GST) {
+            if (bookingDTO.getAcceptFoodGST() == null) {
+                throw new IllegalArgumentException("Food GST preference must be specified for GST billing type.");
+            }
+        }
 
-    public ResponseEntity<BookingDTO> getBookingById(@PathVariable Long id) {
-        BookingDTO bookingDto = bookingService.getBookingById(id);
-        return ResponseEntity.ok(bookingDto);
-    }
+        // Validate booking status transitions
+        if (bookingDTO.getBookingStatus() == BookingStatus.CONFIRMED) {
+            if (bookingDTO.getAdvanceAmount().compareTo(bookingDTO.getBookingAmount()) < 0) {
+                throw new IllegalArgumentException("Advance amount must equal booking amount for confirmed bookings.");
+            }
+        }
 
-    @GetMapping
-
-    public ResponseEntity<List<BookingDTO>> getAllBookings() {
-        List<BookingDTO> bookings = bookingService.getAllBookings();
-        return ResponseEntity.ok(bookings);
-    }
-
-    @GetMapping("/property/{propertyId}")
-
-    public ResponseEntity<List<BookingDTO>> getBookingsByPropertyId(@PathVariable Long propertyId) {
-        List<BookingDTO> bookings = bookingService.getBookingsByPropertyId(propertyId);
-        return ResponseEntity.ok(bookings);
-    }
-
-    @GetMapping("/user/{userId}")
-
-    public ResponseEntity<List<BookingDTO>> getBookingsByUserId(@PathVariable Long userId) {
-        List<BookingDTO> bookings = bookingService.getBookingsByUserId(userId);
-        return ResponseEntity.ok(bookings);
-    }
-
-    @PutMapping("/{id}/checkout")
-
-    public ResponseEntity<BookingDTO> checkoutBooking(@PathVariable Long id) {
-        BookingDTO checkedOutBooking = bookingService.checkoutBooking(id);
-        return ResponseEntity.ok(checkedOutBooking);
-    }
-
-    @PutMapping("/{id}/status")
-
-    public ResponseEntity<BookingDTO> updateBookingStatus(@PathVariable Long id, @RequestParam String status) {
-        BookingDTO updatedBooking = bookingService.updateBookingStatus(id, status);
+        // Delegate to the service layer
+        Booking updatedBooking = bookingService.updateBooking(id, bookingDTO);
         return ResponseEntity.ok(updatedBooking);
+    }
+
+    // Delete a booking
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteBooking(@PathVariable Long id) {
+        bookingService.deleteBooking(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    // Delete all bookings
+    @DeleteMapping
+    public ResponseEntity<Void> deleteAllBookings() {
+        bookingService.deleteAllBookings();
+        return ResponseEntity.noContent().build();
     }
 }

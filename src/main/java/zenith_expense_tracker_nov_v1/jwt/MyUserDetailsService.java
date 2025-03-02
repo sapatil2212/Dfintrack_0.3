@@ -10,7 +10,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import zenith_expense_tracker_nov_v1.dto.UserDTO;
 import zenith_expense_tracker_nov_v1.exception.UserNotFoundException;
-import zenith_expense_tracker_nov_v1.repository.PropertyRepository;
 import zenith_expense_tracker_nov_v1.service.UserService;
 
 import java.util.ArrayList;
@@ -24,16 +23,10 @@ public class MyUserDetailsService implements UserDetailsService {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private PropertyRepository propertyRepository;
-
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         try {
             UserDTO dto = userService.getUserByEmail(email);
-
-            Long propertyId = dto.getPropertyId();
-            String propertyName = dto.getPropertyName();
 
             return new CustomUserDetails(
                     dto.getId(),
@@ -42,9 +35,7 @@ public class MyUserDetailsService implements UserDetailsService {
                     dto.getPassword(),
                     dto.getAccountType(),
                     dto.getSecurityKey(),
-                    new ArrayList<>(),
-                    propertyId,
-                    propertyName
+                    new ArrayList<>()
             );
         } catch (UserNotFoundException e) {
             e.printStackTrace();

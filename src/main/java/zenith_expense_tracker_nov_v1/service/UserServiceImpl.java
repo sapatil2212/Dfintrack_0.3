@@ -89,9 +89,8 @@ public class UserServiceImpl implements UserService {
                 user.getPassword(),
                 user.getAccountType(),
                 user.getSecurityKey(),
-                new ArrayList<>(),
-                user.getProperty() != null ? user.getProperty().getId() : null,  // Include propertyId
-                user.getProperty() != null ? user.getProperty().getName() : null  // Include propertyName
+                new ArrayList<>()
+
         );
 
         String accessToken = jwtHelper.generateToken(userDetails);
